@@ -1,0 +1,6 @@
+[solve, -c, 4]
+Circle's circumference is 25.13 and area is 50.27
+[solve, -r, 3, 2]
+Rectangle's perimeter is 10.0 and area is 6.0
+[solve, -r, 3]
+Rectangle's perimeter is 12.0 and area is 9.0

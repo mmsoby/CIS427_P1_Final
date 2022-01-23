@@ -81,7 +81,7 @@ public class Server {
                         }
                     }
                     else {
-                        outputToClient.writeUTF("You're not using the command correctly.");
+                        outputToClient.writeUTF("301 message format error");
                     }
 
                 }
@@ -136,13 +136,14 @@ public class Server {
 
                         //Case 4: Command not correct
                         else{
-                            outputToClient.writeUTF("You're not using the command correctly.");
+                            outputToClient.writeUTF("301 message format error");
                         }
                     }
                 }
 
                 else if(inputArray[0].equalsIgnoreCase("LOGOUT")){
                     System.out.println("User logged out.");
+                    outputToClient.writeUTF("200 OK");
                     serverSocket.close();
                     socket.close();
                     isLoggedIn = false;
@@ -152,7 +153,7 @@ public class Server {
 
                 else if(strReceived.equalsIgnoreCase("SHUTDOWN")) {
                     System.out.println("Shutting down server...");
-                    outputToClient.writeUTF("Shutting down server...");
+                    outputToClient.writeUTF("200 OK");
                     serverSocket.close();
                     socket.close();
                     break;  //get out of loop
@@ -218,8 +219,11 @@ public class Server {
                 double circumference = 2 * Math.PI * Double.parseDouble(inputArray[2]) ;
                 response = "Circle's circumference is " + Math.round(circumference * 100.0) /100.0 + " and area is " + Math.round(area * 100.0) /100.0;
             }
-            else{
+            else if(inputArray.length == 2){
                 response= "ERROR: No radius found";
+            }
+            else{
+                response ="301 message format error";
             }
         }
         else if(inputArray[1].contains("-r")){
@@ -233,13 +237,18 @@ public class Server {
                 double perimeter = 2 * Double.parseDouble(inputArray[2]) + 2 * Double.parseDouble(inputArray[3]);
                 response = "Rectangle's perimeter is " + Math.round(perimeter * 100.0) /100.0 + " and area is " + Math.round(area * 100.0) /100.0;
             }
+            else if(inputArray.length == 2){
+                double area = Double.parseDouble(inputArray[2]) * Double.parseDouble(inputArray[3]);
+                double perimeter = 2 * Double.parseDouble(inputArray[2]) + 2 * Double.parseDouble(inputArray[3]);
+                response = "Rectangle's perimeter is " + Math.round(perimeter * 100.0) /100.0 + " and area is " + Math.round(area * 100.0) /100.0;
+            }
             else{
-                response= "ERROR: No sides found";
+                response= "301 message format error";
             }
 
         }
         else{
-            response= "ERROR: Incorrect use of SOLVE command.";
+            response= "301 message format error";
         }
 
         return response;
