@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;//Added cause I want to
 import java.util.Date;
 import java.util.Scanner;
 
@@ -97,6 +98,7 @@ public class Server {
                         //Print to file
                         FileWriter fileWriter = new FileWriter("files/"+currentUser+".txt", true);
                         PrintWriter printWriter = new PrintWriter(fileWriter);
+                        printWriter.println(Arrays.asList(inputArray).toString()); // Mohsen's change
                         printWriter.println(dimensions);
                         printWriter.close();
 
@@ -104,7 +106,39 @@ public class Server {
                 }
 
                 else if(inputArray[0].equalsIgnoreCase("LIST")){
+                    if(isLoggedIn) {
+                        String listInformation = "";
+                        File usersFile = new File("files/" + currentUser + ".txt");
 
+                        //Case 1: -all flags
+                        if (inputArray.length == 2 && inputArray[1].equals("-all")) {
+                            if(currentUser.equals("root")){
+                                String allInfo = getListInformation("root",  new File("files/root.txt"))   +
+                                                 getListInformation("john",  new File("files/john.txt"))   +
+                                                 getListInformation("sally", new File("files/sally.txt"))  +
+                                                 getListInformation("qiang", new File("files/qiang.txt"));
+                                outputToClient.writeUTF(allInfo);
+                            }
+                            else{
+                                outputToClient.writeUTF("Error: you are not the root user");
+                            }
+                        }
+                        //Case 2: File doesn't exist
+                        else if (!usersFile.exists() || usersFile.length() == 0) {
+                            listInformation += currentUser + "\n";
+                            listInformation += "\t" + "No interactions yet";
+                            outputToClient.writeUTF(listInformation);
+                        }
+                        //Case 3: no flags
+                        else if(inputArray.length == 1) {
+                            outputToClient.writeUTF(getListInformation(currentUser, usersFile));
+                        }
+
+                        //Case 4: Command not correct
+                        else{
+                            outputToClient.writeUTF("You're not using the command correctly.");
+                        }
+                    }
                 }
 
                 else if(inputArray[0].equalsIgnoreCase("LOGOUT")){
@@ -138,6 +172,37 @@ public class Server {
         return false;
     }//end createCommunicationLoop
 
+    public static String getListInformation(String name, File usersFile){
+        String listInformation = "";
+        try {
+            listInformation = name + "\n";
+            //If file exists and is not empty
+            if(usersFile.exists() && usersFile.length() > 0) {
+                Scanner s = new Scanner(usersFile);
+                while (s.hasNextLine()) {
+                    String data = s.nextLine().substring(1).replaceFirst("]", "").replace(",", ""); //Get next Array of data
+                    String output = s.nextLine(); //Get next solve information output
+
+
+                    if (output.charAt(0) == 'E') { //If output is an Error Type
+                        listInformation += "\t\t" + output + "\n";
+                    } else if (output.charAt(0) == 'R') { //If output is a Rectangle/Square
+                        listInformation += "\t\t" + "sides" + data.substring(8) + ": " + output + "\n";
+                    } else if (output.charAt(0) == 'C') { //If output is a Circle
+                        listInformation += "\t\t" + "radius" + data.substring(8) + ": " + output + "\n";
+                    }
+                }
+            }
+            // File doesn't exist or is empty
+            else {
+                listInformation += "\t\t" + "No interactions yet\n";
+            }
+        }
+        catch(FileNotFoundException e){
+            System.out.println("File for List Information not Found");
+        }
+        return listInformation;
+    }
 
     public static String calculateDimensions(String [] inputArray){
         // SOLVE -c 2
