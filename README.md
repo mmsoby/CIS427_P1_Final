@@ -47,7 +47,7 @@
 - C: logout
 - S: 200 OK
 
-  ###Example 2
+  ### Example 2
 - C: login root root22
 - S: SUCCESS
 - C: list -all 
