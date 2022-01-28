@@ -4,3 +4,23 @@ Circle's circumference is 25.13 and area is 50.27
 Rectangle's perimeter is 10.0 and area is 6.0
 [solve, -r, 3]
 Rectangle's perimeter is 12.0 and area is 9.0
+[solve, -c, 4]
+Circle's circumference is 25.13 and area is 50.27
+[solve, -c]
+ERROR: No radius found
+[solve, -r]
+ERROR: No sides found
+[solve, -r, 2]
+Rectangle's perimeter is 8.0 and area is 4.0
+[solve, -r, 2, 6]
+Rectangle's perimeter is 16.0 and area is 12.0
+[solve, alks]
+301 message format error
+[solve, -c, 4]
+Circle's circumference is 25.13 and area is 50.27
+[solve, -c, 4]
+Circle's circumference is 25.13 and area is 50.27
+[solve, -r, 4]
+Rectangle's perimeter is 16.0 and area is 16.0
+[solve, -r, 5, 6]
+Rectangle's perimeter is 22.0 and area is 30.0

@@ -22,10 +22,13 @@ public class Server {
         loadUsers();
         boolean result;
         do{
+            //result stores the value of the createCommunicationLoop() so that after
+            //someone logs out the server still runs.
             result = createCommunicationLoop();
         } while(result);
     }//end main
 
+    //This function loads all the registered users into an arraylist from the file
     public static void loadUsers(){
         try {
             Scanner sc = new Scanner(new File(USERS_FILENAME));
@@ -42,7 +45,7 @@ public class Server {
         try {
             //create server socket
             ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
-            System.out.println("Server started att " + new Date() + "\n");
+            System.out.println("Server started at " + new Date() + "\n");
 
             //listen for a connection
             //using a regular *client* socket
@@ -57,12 +60,14 @@ public class Server {
             //and responding
             while(true) {
                 String strReceived = inputFromClient.readUTF();
+                System.out.println(strReceived);
 
                 String [] inputArray = strReceived.split(" ");
 
                 if(inputArray[0].equalsIgnoreCase("LOGIN")) {
                     if(isLoggedIn){
                         outputToClient.writeUTF("You must first logout.");
+                        continue;
                     }
 
                     //Check login info and send back corresponding message
@@ -142,7 +147,7 @@ public class Server {
                 }
 
                 else if(inputArray[0].equalsIgnoreCase("LOGOUT")){
-                    System.out.println("User logged out.");
+                    System.out.println("User "+currentUser+" logged out.");
                     outputToClient.writeUTF("200 OK");
                     serverSocket.close();
                     socket.close();
@@ -160,10 +165,7 @@ public class Server {
                 }
 
                 else {
-                    System.out.println("Unknown command received: "
-                            + strReceived);
-                    outputToClient.writeUTF("Unknown command.  "
-                            + "Please try again.");
+                    outputToClient.writeUTF("300 invalid command");
                 }
             }//end server loop
         }
@@ -173,6 +175,7 @@ public class Server {
         return false;
     }//end createCommunicationLoop
 
+    //This function gets the list information from the files and prints them out
     public static String getListInformation(String name, File usersFile){
         String listInformation = "";
         try {
@@ -205,13 +208,9 @@ public class Server {
         return listInformation;
     }
 
+    //Calculates the dimensions of the string array given and returns a string response of the answer
     public static String calculateDimensions(String [] inputArray){
-        // SOLVE -c 2
-        // SOLVE -r 2
-        // SOLVE -r 2 4
-
         String response = "";
-
 
         if(inputArray[1].contains("-c")){
             if(inputArray.length == 3){
@@ -238,9 +237,7 @@ public class Server {
                 response = "Rectangle's perimeter is " + Math.round(perimeter * 100.0) /100.0 + " and area is " + Math.round(area * 100.0) /100.0;
             }
             else if(inputArray.length == 2){
-                double area = Double.parseDouble(inputArray[2]) * Double.parseDouble(inputArray[3]);
-                double perimeter = 2 * Double.parseDouble(inputArray[2]) + 2 * Double.parseDouble(inputArray[3]);
-                response = "Rectangle's perimeter is " + Math.round(perimeter * 100.0) /100.0 + " and area is " + Math.round(area * 100.0) /100.0;
+                response= "ERROR: No sides found";
             }
             else{
                 response= "301 message format error";

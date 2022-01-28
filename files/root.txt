@@ -1,2 +1,0 @@
-[solve, -r, 3]
-Rectangle's perimeter is 12.0 and area is 9.0
