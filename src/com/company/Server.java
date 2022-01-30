@@ -146,7 +146,7 @@ public class Server {
                     }
                 }
 
-                else if(inputArray[0].equalsIgnoreCase("LOGOUT")){
+                else if(strReceived.equalsIgnoreCase("LOGOUT")){
                     System.out.println("User "+currentUser+" logged out.");
                     outputToClient.writeUTF("200 OK");
                     serverSocket.close();

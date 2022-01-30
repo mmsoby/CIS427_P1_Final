@@ -26,7 +26,7 @@ https://github.com/mmsoby/CIS427_P1_Final
   - Alternatively compile the java source code into bytecode and run it using the terminal.
 - Run the server application and allow it to initialize.
 - Run the client application and allow it to initialize.
-- login to the server and begin using your commands.
+- Login to the server and begin using the commands.
 
 ## Known problems and bugs
 - None.
