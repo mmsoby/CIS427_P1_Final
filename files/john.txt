@@ -24,3 +24,13 @@ Circle's circumference is 25.13 and area is 50.27
 Rectangle's perimeter is 16.0 and area is 16.0
 [solve, -r, 5, 6]
 Rectangle's perimeter is 22.0 and area is 30.0
+[solve, -c, er]
+301 message format error
+[solve, -r, r3]
+301 message format error
+[solve, -4, 4]
+301 message format error
+[solve, -4]
+301 message format error
+[solve, -c, 45]
+Circle's circumference is 282.74 and area is 6361.73
